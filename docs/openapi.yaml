@@ -1,0 +1,173 @@
+openapi: 3.0.3
+info:
+  title: MedEquip API
+  description: |
+    Django REST API backing the MedEquip medical equipment marketplace.
+    Authentication uses JWT (access + refresh token pair).
+  version: "1.0.0"
+  contact:
+    name: MedEquip Engineering
+servers:
+  - url: https://api.medequip.example.com/api
+    description: Production
+  - url: http://localhost:8000/api
+    description: Local development
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:       { type: integer }
+        sku:      { type: string, example: MEQ-IMG-001 }
+        name:     { type: string, example: "ProScan 3T MRI System" }
+        brand:    { type: string }
+        category: { type: string, enum: [imaging, monitoring, surgical, respiratory, diagnostic, rehabilitation] }
+        price:    { type: number, format: float }
+        currency: { type: string, example: USD }
+        availability: { type: string, enum: [in-stock, lead-time, on-request] }
+        certifications:
+          type: array
+          items: { type: string, enum: [FDA, MDR, ISO13485, CE] }
+        specs:    { type: object, additionalProperties: true }
+        media:
+          type: array
+          items: { type: string, format: uri }
+
+    QuoteRequest:
+      type: object
+      required: [first_name, last_name, email, organization, quantity, timeframe]
+      properties:
+        product_id:    { type: integer, nullable: true }
+        first_name:    { type: string }
+        last_name:     { type: string }
+        email:         { type: string, format: email }
+        organization:  { type: string }
+        phone:         { type: string, nullable: true }
+        quantity:      { type: integer, minimum: 1 }
+        timeframe:     { type: string }
+        notes:         { type: string, nullable: true }
+
+paths:
+  /products/:
+    get:
+      summary: List products
+      security: []
+      parameters:
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: page
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Paginated product list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:   { type: integer }
+                  next:    { type: string, nullable: true }
+                  results:
+                    type: array
+                    items: { $ref: "#/components/schemas/Product" }
+
+  /products/{id}/:
+    get:
+      summary: Product detail
+      security: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Product detail
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Product" }
+        "404":
+          description: Not found
+
+  /quotes/:
+    post:
+      summary: Submit quote request
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/QuoteRequest" }
+      responses:
+        "201":
+          description: Quote created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:      { type: string }
+                  message: { type: string }
+
+  /auth/login/:
+    post:
+      summary: Obtain JWT tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:    { type: string, format: email }
+                password: { type: string, format: password }
+      responses:
+        "200":
+          description: Token pair
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access:  { type: string }
+                  refresh: { type: string }
+
+  /auth/refresh/:
+    post:
+      summary: Refresh access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh]
+              properties:
+                refresh: { type: string }
+      responses:
+        "200":
+          description: New access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access: { type: string }
