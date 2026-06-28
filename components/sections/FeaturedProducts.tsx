@@ -1,4 +1,5 @@
 ﻿"use client";
+
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
@@ -14,10 +15,15 @@ export default function FeaturedProducts() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(".feat-card", {
-        opacity: 0, y: 40, stagger: 0.1, duration: 0.7, ease: "power3.out",
+        opacity: 0,
+        y: 36,
+        stagger: 0.1,
+        duration: 0.7,
+        ease: "power3.out",
         scrollTrigger: { trigger: ref.current, start: "top 80%", once: true },
       });
     }, ref);
+
     return () => ctx.revert();
   }, []);
 
@@ -28,10 +34,21 @@ export default function FeaturedProducts() {
       <div className="container-page">
         <div className="flex items-end justify-between mb-12 gap-4 flex-wrap">
           <div>
-            <p className="text-xs font-mono text-gold-400 uppercase tracking-widest mb-2">Highlighted</p>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-forest leading-tight">Featured Equipment</h2>
+            <p className="text-xs font-mono text-gold-300 uppercase tracking-widest mb-2">
+              Highlighted
+            </p>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-forest leading-tight">
+              Featured Equipment
+            </h2>
+            <p className="text-stone-500 text-sm mt-3 max-w-xl">
+              Curated devices selected for clinical reliability, certification, and strong demand across medical facilities.
+            </p>
           </div>
-          <Link href="/products" className="text-sm font-semibold text-mint-600 hover:text-forest transition-colors inline-flex items-center gap-1">
+
+          <Link
+            href="/products"
+            className="text-sm font-semibold text-mint-600 hover:text-forest transition-colors inline-flex items-center gap-1"
+          >
             View all products <span>→</span>
           </Link>
         </div>

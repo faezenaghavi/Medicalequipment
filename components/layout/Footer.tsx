@@ -6,76 +6,69 @@ const COLS = [
     links: [
       { href: "/products?cat=imaging",        label: "Imaging Systems"    },
       { href: "/products?cat=monitoring",     label: "Patient Monitoring" },
-      { href: "/products?cat=surgical",       label: "Surgical"           },
+      { href: "/products?cat=surgical",       label: "Surgical Equipment" },
       { href: "/products?cat=respiratory",    label: "Respiratory"        },
-      { href: "/products?cat=diagnostic",     label: "Diagnostic"         },
-      { href: "/products?cat=rehabilitation", label: "Rehabilitation"     },
+      { href: "/products?cat=diagnostic",     label: "Laboratory"         },
     ],
   },
   {
     title: "Company",
     links: [
-      { href: "#", label: "About MedEquip" },
+      { href: "#", label: "About Us"       },
       { href: "#", label: "Certifications" },
-      { href: "#", label: "Regulatory"     },
+      { href: "#", label: "Partners"       },
       { href: "#", label: "Careers"        },
+      { href: "#", label: "News"           },
     ],
   },
   {
     title: "Support",
     links: [
-      { href: "/quote",  label: "Request Quote" },
-      { href: "#",       label: "Documentation" },
-      { href: "#",       label: "Training"      },
-      { href: "#",       label: "Contact Us"    },
+      { href: "/quote", label: "Request a Quote"   },
+      { href: "#",      label: "Technical Support" },
+      { href: "#",      label: "Service Contracts" },
+      { href: "#",      label: "Documentation"     },
+      { href: "#",      label: "Contact Us"        },
     ],
   },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-forest text-surface-100">
-      <div className="container-page py-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
-        {/* Brand */}
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-8 h-8 rounded-lg bg-mint-200 flex items-center justify-center text-forest font-bold text-sm">M</span>
-            <span className="font-display font-bold text-lg">Med<span className="text-gold-300">Equip</span></span>
+    <footer className="footer">
+      <div className="container">
+        <div className="footer-grid">
+
+          {/* Brand column */}
+          <div>
+            <Link href="/" className="logo" style={{ color: "#fff", marginBottom: "14px", display: "flex" }}>
+              <span className="logo-icon">M</span>
+              Med<span className="logo-accent">Equip</span>
+            </Link>
+            <p style={{ fontSize: "13px", lineHeight: 1.7, maxWidth: "240px", color: "rgba(255,255,255,0.65)" }}>
+              Premium medical equipment for hospitals, clinics, and research facilities worldwide.
+            </p>
           </div>
-          <p className="text-stone-300 text-sm leading-relaxed max-w-xs">
-            Premium medical equipment for healthcare institutions worldwide. FDA cleared · MDR compliant.
-          </p>
-          <div className="flex gap-2 mt-6">
-            {["FDA", "MDR", "ISO"].map((b) => (
-              <span key={b} className="text-[10px] font-mono font-medium px-2 py-1 rounded-md bg-mint-200/10 text-mint-200 border border-mint-200/20">
-                {b}
-              </span>
-            ))}
-          </div>
+
+          {/* Link columns */}
+          {COLS.map(col => (
+            <div key={col.title} className="footer-col">
+              <h4>{col.title}</h4>
+              {col.links.map(l => (
+                <Link key={l.label} href={l.href} className="footer-link">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          ))}
         </div>
 
-        {COLS.map((col) => (
-          <div key={col.title}>
-            <h4 className="text-sm font-semibold text-surface-100 mb-4 uppercase tracking-widest">{col.title}</h4>
-            <ul className="space-y-2.5">
-              {col.links.map((l) => (
-                <li key={l.label}>
-                  <Link href={l.href} className="text-stone-300 hover:text-mint-200 text-sm transition-colors">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <div className="border-t border-white/10">
-        <div className="container-page py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-stone-400 text-xs">
-          <p>© {new Date().getFullYear()} MedEquip Inc. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link href="#" className="hover:text-mint-200 transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-mint-200 transition-colors">Terms of Use</Link>
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} MedEquip. All rights reserved.</span>
+          <div className="footer-certs">
+            {["FDA", "CE", "ISO 13485", "MDR"].map(c => (
+              <span key={c} className="cert-pill">{c}</span>
+            ))}
           </div>
         </div>
       </div>

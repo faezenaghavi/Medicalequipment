@@ -1,0 +1,91 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design tokens ── */
+:root {
+  --forest:      #0d4f3c;
+  --forest-700:  #0a3d2e;
+  --forest-100:  #e6f2ee;
+  --mint-50:     #f0faf5;
+  --mint-100:    #d6f2e5;
+  --mint-200:    #aee4cc;
+  --mint-300:    #74cda8;
+  --mint-400:    #3db882;
+  --mint-600:    #1a9e68;
+  --gold-300:    #e6b83a;
+  --gold-400:    #d4a017;
+  --surface-50:  #f9fafb;
+  --surface-100: #f3f5f4;
+  --stone-300:   #c8cdc9;
+  --stone-400:   #9aa09b;
+  --stone-500:   #6b726d;
+  --shadow-sm:   0 1px 8px rgba(13,79,60,0.06);
+  --shadow-md:   0 8px 32px rgba(13,79,60,0.10);
+  --shadow-lg:   0 16px 48px rgba(13,79,60,0.14);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Inter', var(--font-body, system-ui), sans-serif;
+  background: var(--surface-100);
+  color: var(--stone-500);
+  line-height: 1.6;
+  font-size: 14px;
+  overflow-x: hidden;
+}
+h1,h2,h3,h4 {
+  font-family: 'Syne', var(--font-display, system-ui), sans-serif;
+  color: var(--forest);
+  line-height: 1.2;
+}
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface-100); }
+::-webkit-scrollbar-thumb { background: var(--mint-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--mint-300); }
+
+/* ── Layout ── */
+.container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 80px 0; }
+.section-label {
+  font-size: 11px; font-weight: 700; color: var(--gold-400);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 4vw, 42px); font-weight: 800;
+  color: var(--forest); margin-bottom: 14px;
+}
+.section-desc { font-size: 15px; color: var(--stone-400); max-width: 560px; line-height: 1.7; }
+.section-header { margin-bottom: 48px; }
+.section-header.centered { text-align: center; }
+.section-header.centered .section-desc { margin: 0 auto; }
+
+/* ── Buttons ── */
+.btn-primary {
+  padding: 14px 28px; border-radius: 14px; background: var(--gold-300); color: var(--forest);
+  font-weight: 700; font-size: 15px; border: none; cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 4px 18px rgba(230,184,58,0.35); display: inline-flex; align-items: center;
+  gap: 8px; text-decoration: none; font-family: inherit;
+}
+.btn-primary:hover { background: var(--gold-400); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(230,184,58,0.4); }
+.btn-cta {
+  padding: 10px 20px; border-radius: 12px; background: var(--forest); color: #fff;
+  font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: all 0.18s;
+  display: inline-flex; align-items: center; text-decoration: none; font-family: inherit;
+}
+.btn-cta:hover { background: var(--forest-700); transform: translateY(-1px); }
+.btn-cta:active { transform: scale(0.98); }
+.btn-outline-hero {
+  padding: 14px 28px; border-radius: 14px; background: transparent;
+  color: rgba(255,255,255,0.9); font-weight: 600; font-size: 15px;
+  border: 1.5px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.2s;
+  display: inline-flex; align-items: center; text-decoration: none; font-family: inherit;
+}
+.btn-outline-hero:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+/* ... ادامه CSS شما ... */
