@@ -1,5 +1,5 @@
 ﻿"use client";
-import { useState, useMemo } from "react";
+import { useState,useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import Navbar       from "@/components/layout/Navbar";
@@ -7,11 +7,11 @@ import Footer       from "@/components/layout/Footer";
 import ProductCard  from "@/components/product/ProductCard";
 import { PRODUCTS, CATEGORIES } from "@/data/products";
 
+
 function CatalogContent() {
   const searchParams = useSearchParams();
-  const initCat = searchParams.get("cat") ?? "all";
-
-  const [activeCat, setActiveCat] = useState(initCat);
+  const catFromUrl = searchParams.get("cat") ?? "all";
+const [activeCat, setActiveCat] = useState(catFromUrl);
   const [search,    setSearch]    = useState("");
   const [sort,      setSort]      = useState("name");
 
@@ -25,6 +25,10 @@ function CatalogContent() {
     if (sort === "rating")     items.sort((a, b) => b.rating - a.rating);
     return items;
   }, [activeCat, search, sort]);
+
+  useEffect(() => {
+  setActiveCat(catFromUrl);
+}, [catFromUrl]);
 
   return (
     <>
@@ -66,20 +70,25 @@ function CatalogContent() {
 
           {/* Category tabs */}
           <div className="flex flex-wrap gap-2 mb-8">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.value}
-                onClick={() => setActiveCat(cat.value)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
-                  activeCat === cat.value
-                    ? "bg-forest text-white border-forest shadow-sm"
-                    : "bg-white text-stone border-mint-200 hover:border-mint-400 hover:bg-mint-50"
-                }`}
-              >
-                <span>{cat.icon}</span>{cat.label}
-              </button>
-            ))}
-          </div>
+  {CATEGORIES.map((cat) => {
+    const Icon = cat.icon;
+
+    return (
+      <button
+        key={cat.value}
+        onClick={() => setActiveCat(cat.value)}
+        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+          activeCat === cat.value
+            ? "bg-forest text-white border-forest shadow-sm"
+            : "bg-white text-stone border-mint-200 hover:border-mint-400 hover:bg-mint-50"
+        }`}
+      >
+        <Icon className="h-4 w-4" />
+        {cat.label}
+      </button>
+    );
+  })}
+</div>
 
           {/* Results */}
           <p className="text-sm text-stone-400 mb-5">{filtered.length} product{filtered.length !== 1 ? "s" : ""} found</p>

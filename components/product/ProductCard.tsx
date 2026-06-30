@@ -70,23 +70,35 @@ export default function ProductCard({ product }: { product: Product }) {
     <div ref={cardRef} style={{ transformStyle: "preserve-3d" }}>
       <Link href={`/products/${product.id}`} className="block group h-full">
         <article className="h-full bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 border border-mint-100/60 flex flex-col">
-          <div className="relative h-48 overflow-hidden bg-mint-50">
+
+          {/* Image stage — soft gradient backdrop frames the product like studio lighting,
+              instead of the photo sitting flat against a plain background */}
+          <div className="relative h-52 overflow-hidden product-stage">
+            <div className="product-stage-backdrop" aria-hidden="true" />
+            <div className="product-stage-ring" aria-hidden="true" />
+
             <Image
               src={coverSrc}
               alt={product.name}
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              className="object-contain p-6 group-hover:scale-[1.04] transition-transform duration-500 relative z-10"
             />
 
             {product.featured && (
-              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-gold-300 text-forest">
+              <span className="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-gold-300 text-forest shadow-sm">
                 Featured
               </span>
             )}
 
-            <div className="absolute top-3 right-3">
+            <div className="absolute top-3 right-3 z-20">
               <AvailabilityBadge status={product.availability} />
+            </div>
+
+            {/* Floating price chip anchored to the image stage — premium "shelf tag" feel */}
+            <div className="product-stage-price">
+              <span className="product-stage-price-label">From</span>
+              <span className="product-stage-price-value">{price}</span>
             </div>
           </div>
 
@@ -115,7 +127,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
             <div className="flex items-center justify-between pt-2 border-t border-mint-100">
               <div>
-                <p className="text-[10px] text-stone-400 uppercase tracking-wide">From</p>
+                <p className="text-[10px] text-stone-400 uppercase tracking-wide">Starting at</p>
                 <p className="font-display font-bold text-forest text-lg">{price}</p>
               </div>
               <span className="px-4 py-2 rounded-xl bg-mint-100 text-mint-600 text-xs font-semibold group-hover:bg-forest group-hover:text-white transition-colors">

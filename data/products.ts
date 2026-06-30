@@ -1,4 +1,14 @@
 ﻿import type { Product } from "@/types";
+import type { LucideIcon } from "lucide-react";
+import {
+  Hospital,
+  ScanSearch,
+  Activity,
+  Stethoscope,
+  Microscope,
+  Wind,
+  PersonStanding,
+} from "lucide-react";
 
 export const PRODUCTS: Product[] = [
   {
@@ -340,11 +350,11 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const CATEGORIES = [
-  { value: "all", label: "All Products", icon: "🏥" },
-  { value: "imaging", label: "Imaging", icon: "🩻" },
-  { value: "monitoring", label: "Monitoring", icon: "📊" },
-  { value: "surgical", label: "Surgical", icon: "🔬" },
-  { value: "diagnostic", label: "Diagnostic", icon: "🧪" },
-  { value: "respiratory", label: "Respiratory", icon: "🫁" },
-  { value: "rehabilitation", label: "Rehab", icon: "🏃" },
+  { value: "all", label: "All Products", icon: Hospital },
+  { value: "imaging", label: "Imaging", icon: ScanSearch },
+  { value: "monitoring", label: "Monitoring", icon: Activity },
+  { value: "surgical", label: "Surgical", icon: Stethoscope },
+  { value: "diagnostic", label: "Diagnostic", icon: Microscope },
+  { value: "respiratory", label: "Respiratory", icon: Wind },
+  { value: "rehabilitation", label: "Rehab", icon: PersonStanding },
 ] as const;

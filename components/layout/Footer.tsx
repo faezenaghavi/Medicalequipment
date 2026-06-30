@@ -11,16 +11,17 @@ const COLS = [
       { href: "/products?cat=diagnostic",     label: "Laboratory"         },
     ],
   },
-  {
-    title: "Company",
-    links: [
-      { href: "#", label: "About Us"       },
-      { href: "#", label: "Certifications" },
-      { href: "#", label: "Partners"       },
-      { href: "#", label: "Careers"        },
-      { href: "#", label: "News"           },
-    ],
-  },
+
+{
+  title: "Company",
+  links: [
+    { href: "/", label: "About Us" },
+    { href: "/", label: "Certifications" },
+    { href: "/", label: "Partners" },
+    { href: "/", label: "Careers" },
+    { href: "/", label: "News" },
+  ],
+},
   {
     title: "Support",
     links: [
@@ -74,4 +75,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+} 

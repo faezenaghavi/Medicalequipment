@@ -1,74 +1,109 @@
+// components/blocks/Hero.tsx
 "use client";
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { gsap } from "gsap";
 
-import React, { useState, useEffect } from "react";
-import { AuroraBackground } from "@/components/ui/aurora-background";
+const STATS = [
+  { num: "1,200+", label: "Devices Deployed" },
+  { num: "98.4%", label: "Uptime SLA" },
+  { num: "40+", label: "Countries Served" },
+];
 
-export const Hero = () => {
-  const [scrolled, setScrolled] = useState(false);
+const VISUAL_TAGS = [
+  { label: "FDA Cleared", top: "14%", left: "8%" },
+  { label: "ISO 13485", top: "62%", left: "4%" },
+  { label: "CE Marked", top: "38%", left: "82%" },
+];
+
+export function Hero() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const blobRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.from(".hero-eyebrow", { y: 16, opacity: 0, duration: 0.6 })
+        .from(".hero-line", { y: 36, opacity: 0, duration: 0.8, stagger: 0.08 }, "-=0.3")
+        .from(".hero-desc", { y: 20, opacity: 0, duration: 0.6 }, "-=0.4")
+        .from(".hero-actions a, .hero-actions button", { y: 16, opacity: 0, duration: 0.5, stagger: 0.08 }, "-=0.3")
+        .from(".hero-stat", { y: 20, opacity: 0, duration: 0.5, stagger: 0.08 }, "-=0.2")
+        .from(".hero-tag", { scale: 0.8, opacity: 0, duration: 0.5, stagger: 0.1, ease: "back.out(1.7)" }, "-=0.6")
+        .from(".hero-disc", { scale: 0.85, opacity: 0, duration: 0.9, ease: "power2.out" }, "-=0.7");
+    }, rootRef);
+
+    // Ambient pointer-reactive gradient drift (cheap, GPU-friendly)
+    const onMove = (e: MouseEvent) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - 0.5) * 24;
+      const y = (e.clientY / innerHeight - 0.5) * 24;
+      gsap.to(blobRef.current, { x, y, duration: 1.2, ease: "power2.out" });
+    };
+    window.addEventListener("mousemove", onMove);
+
+    return () => {
+      ctx.revert();
+      window.removeEventListener("mousemove", onMove);
+    };
   }, []);
 
   return (
-    <div className="font-sans text-stone-500">
-      {/* Navbar */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-white/90 backdrop-blur-md border-b border-mint-100" : "bg-transparent"}`}>
-        <div className="max-w-[1180px] mx-auto px-6 h-[68px] flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 font-syne text-[18px] font-bold text-forest">
-            <div className="w-9 h-9 rounded-[10px] bg-mint-300 flex items-center justify-center font-extrabold text-[15px] text-forest">M</div>
-            Med<span className="text-gold-300">Equip</span>
-          </a>
-          
-          <div className="hidden md:flex items-center gap-1">
-            {["Products", "Imaging", "Monitoring", "Quote"].map((item) => (
-              <a key={item} href={`/${item.toLowerCase()}`} className="px-4 py-2 rounded-xl text-sm font-medium text-stone-500 hover:text-forest hover:bg-mint-50 transition-all">
-                {item}
-              </a>
+    <section ref={rootRef} className="hero-premium" aria-label="Intro">
+      <div className="hero-grain" aria-hidden="true" />
+      <div ref={blobRef} className="hero-blob" aria-hidden="true" />
+
+      <div className="container hero-premium-grid">
+        <div>
+          <span className="hero-eyebrow">
+            <span className="hero-eyebrow-dot" />
+            Trusted by 500+ healthcare facilities worldwide
+          </span>
+
+          <h1 className="hero-premium-title">
+            <span className="hero-line">Medical equipment,</span>
+            <span className="hero-line">
+              engineered for <span className="hero-gradient-text">absolute trust.</span>
+            </span>
+          </h1>
+
+          <p className="hero-desc">
+            Every device on MedEquip is sourced, certified, and serviced to hospital-grade
+            standards — so your team can focus on patient care, not procurement risk.
+          </p>
+
+          <div className="hero-actions">
+            <Link href="/products" className="btn-primary">
+              Browse the catalogue
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </Link>
+            <Link href="/quote" className="btn-outline-hero">Request a quote</Link>
+          </div>
+
+          <div className="hero-stats">
+            {STATS.map((s) => (
+              <div key={s.label} className="stat-card hero-stat">
+                <div className="stat-num">{s.num}</div>
+                <div className="stat-label">{s.label}</div>
+              </div>
             ))}
           </div>
-
-          <button className="px-5 py-2.5 rounded-xl bg-forest text-white text-sm font-semibold hover:bg-[#0a3d2e] transition-all">
-            Request Quote
-          </button>
-        </div>
-      </nav>
-
-      {/* Hero */}
-      <section className="min-h-screen pt-[68px] bg-gradient-to-br from-[#0d4f3c] via-[#1a7a5a] to-[#0a3d2e] flex items-center relative overflow-hidden">
-        {/* Aurora Background Overlay */}
-        <div className="absolute inset-0 opacity-40">
-           <AuroraBackground showRadialGradient={true}>
-             <div />
-           </AuroraBackground>
         </div>
 
-        <div className="max-w-[1180px] mx-auto px-6 grid md:grid-cols-2 gap-16 items-center relative z-10 py-20">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-[rgba(110,205,168,0.2)] border border-[rgba(110,205,168,0.35)] rounded-full px-4 py-1.5 text-[11px] font-semibold text-mint-300 uppercase tracking-widest mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-mint-400"></span>
-              Trusted by 800 hospitals worldwide
-            </div>
-            <h1 className="font-syne text-[clamp(36px,5vw,60px)] font-extrabold text-white leading-[1.08] mb-6">
-              Medical Equipment <br />
-              <span className="text-gold-300">Built for</span> Precision Care
-            </h1>
-            <p className="text-[16px] text-white/70 leading-relaxed mb-10 max-w-[440px]">
-              From advanced imaging systems to critical care monitors — certified, reliable, and ready for your facility’s demands.
-            </p>
-            <div className="flex gap-4">
-              <button className="px-8 py-4 rounded-2xl bg-gold-300 text-forest font-bold text-[15px] hover:bg-gold-400 transition-all shadow-lg shadow-gold-300/20">
-                Browse Catalogue
-              </button>
-              <button className="px-8 py-4 rounded-2xl border border-white/30 text-white font-semibold text-[15px] hover:bg-white/10 transition-all">
-                Request a Quote
-              </button>
+        <div className="hero-visual-premium">
+          <div className="hero-disc">
+            <div className="hero-disc-ring" />
+            <div className="hero-disc-ring hero-disc-ring-2" />
+            <div className="hero-disc-core">
+              <span className="hero-disc-icon">M</span>
             </div>
           </div>
+          {VISUAL_TAGS.map((t) => (
+            <span key={t.label} className="hero-tag" style={{ top: t.top, left: t.left }}>
+              {t.label}
+            </span>
+          ))}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
-};
+}
