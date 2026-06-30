@@ -2,123 +2,157 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
-
-const STATS = [
-  { value: "1,200+", label: "Medical Devices" },
-  { value: "98 Countries", label: "Worldwide Delivery" },
-  { value: "FDA / MDR", label: "Certified Products" },
-  { value: "24 h", label: "Expert Support" },
-];
 
 const CATEGORIES = [
-  { icon: "◎", label: "Imaging",        href: "/products?cat=imaging"        },
-  { icon: "♡", label: "Monitoring",     href: "/products?cat=monitoring"     },
-  { icon: "✦", label: "Surgical",       href: "/products?cat=surgical"       },
-  { icon: "◌", label: "Respiratory",    href: "/products?cat=respiratory"    },
-  { icon: "△", label: "Diagnostic",     href: "/products?cat=diagnostic"     },
-  { icon: "⊕", label: "Rehabilitation", href: "/products?cat=rehabilitation" },
+  { icon: "◎", label: "Imaging", blurb: "MRI, CT, X-ray systems", href: "/products?cat=imaging" },
+  { icon: "♡", label: "Monitoring", blurb: "ICU & bedside monitors", href: "/products?cat=monitoring" },
+  { icon: "✦", label: "Surgical", blurb: "OR-ready equipment", href: "/products?cat=surgical" },
+  { icon: "△", label: "Diagnostic", blurb: "Lab & analysis systems", href: "/products?cat=diagnostic" },
+  { icon: "◌", label: "Respiratory", blurb: "Ventilators & support", href: "/products?cat=respiratory" },
 ];
 
-export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headRef    = useRef<HTMLHeadingElement>(null);
-  const blobRef    = useRef<HTMLDivElement>(null);
+export function Hero() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const glowRef = useRef<HTMLDivElement | null>(null);
+  const cursorRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(".hero-eyebrow", { opacity: 0, y: 12, duration: 0.5 })
-        .from(".hero-word",    { opacity: 0, y: 28, stagger: 0.06, duration: 0.65 }, "-=0.2")
-        .from(".hero-sub",     { opacity: 0, y: 16, duration: 0.55 }, "-=0.4")
-        .from(".hero-cta",     { opacity: 0, y: 12, stagger: 0.07, duration: 0.45 }, "-=0.35")
-        .from(".hero-stat",    { opacity: 0, y: 10, stagger: 0.06, duration: 0.4  }, "-=0.3")
-        .from(".hero-cat",     { opacity: 0, x: -8, stagger: 0.04, duration: 0.4  }, "-=0.4");
 
-      /* blob parallax */
-      gsap.to(blobRef.current, {
-        yPercent: 25, ease: "none",
-        scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "bottom top", scrub: 1.5 },
+      tl.from(".neon-badge", { opacity: 0, y: 12, duration: 0.45 })
+        .from(".neon-word", { opacity: 0, y: 28, stagger: 0.045, duration: 0.7 }, "-=0.25")
+        .from(".neon-sub", { opacity: 0, y: 16, duration: 0.45 }, "-=0.5")
+        .from(".neon-cta", { opacity: 0, y: 12, stagger: 0.06, duration: 0.42 }, "-=0.35")
+        .from(".neon-feature", { opacity: 0, y: 18, stagger: 0.06, duration: 0.48 }, "-=0.3")
+        .from(".neon-terminal", { opacity: 0, duration: 0.6 }, "-=0.25");
+
+      gsap.to(glowRef.current, {
+        scale: 1.115,
+        opacity: 0.86,
+        duration: 4.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      gsap.to(cursorRef.current, {
+        opacity: 0,
+        duration: 0.6,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
       });
     }, sectionRef);
+
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen bg-hero-gradient overflow-hidden flex flex-col justify-center pt-24 pb-16">
+    <section
+      ref={sectionRef}
+      className="relative isolate overflow-hidden bg-[#04060d] py-20 sm:py-24 lg:py-28"
+      aria-label="Intro"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(0,255,240,0.14),_transparent_35%),radial-gradient(circle_at_bottom,_rgba(92,108,255,0.10),_transparent_45%),linear-gradient(to_bottom,_rgba(255,255,255,0.03),_transparent_18%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:72px_72px] opacity-[0.08]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(18,28,50,0.1),rgba(4,6,13,0.85)_68%,rgba(4,6,13,1)_100%)]"
+      />
 
-      {/* decorative blobs */}
-      <div ref={blobRef} className="pointer-events-none absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-mint-100/60 blur-[96px]" aria-hidden="true"/>
-      <div className="pointer-events-none absolute -bottom-16 -left-16 w-[400px] h-[400px] rounded-full bg-gold-50/80 blur-[80px]" aria-hidden="true"/>
+      <div
+        ref={glowRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[42rem] w-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,240,255,0.22)_0%,rgba(0,240,255,0.10)_18%,rgba(92,108,255,0.06)_38%,transparent_68%)] blur-3xl"
+      />
 
-      <div className="container-page relative z-10">
-        <div className="grid lg:grid-cols-[1fr_420px] gap-16 items-center">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl">
+          <span className="neon-badge inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-white/5 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.28em] text-cyan-100/90 shadow-[0_0_30px_rgba(0,240,255,0.10)] backdrop-blur-md sm:text-xs">
+            <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_16px_rgba(103,232,249,0.95)]" />
+            SYSTEM: FLEET MONITOR <span className="text-emerald-300">ONLINE</span>
+          </span>
 
-          {/* Copy */}
-          <div>
-            <span className="hero-eyebrow inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-mint-100 border border-mint-200 text-mint-600 text-xs font-semibold mb-7">
-              <span className="w-1.5 h-1.5 rounded-full bg-mint-500 animate-pulse"/>
-              1,200+ FDA & MDR Certified Devices
-            </span>
-
-            <h1 ref={headRef} className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-forest leading-[1.06] tracking-tight mb-6">
-              {"The professional\nmarketplace for\nmedical equipment".split("\n").map((line, li) => (
-                <span key={li} className="block">
-                  {line.split(" ").map((w, wi) => (
-                    <span key={wi} className="hero-word inline-block mr-[0.28em]">{w}</span>
-                  ))}
+          <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-white sm:text-6xl lg:text-7xl">
+            <span className="block">
+              {"The professional".split(" ").map((w, i) => (
+                <span
+                  key={i}
+                  className="neon-word inline-block mr-[0.26em] bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(103,232,249,0.20)]"
+                >
+                  {w}
                 </span>
               ))}
-            </h1>
+            </span>
 
-            <p className="hero-sub text-stone-500 text-lg leading-relaxed max-w-lg mb-8">
-              Source imaging systems, ICU monitors, surgical equipment and more — all FDA cleared, MDR compliant, and backed by expert clinical support.
-            </p>
-
-            <div className="flex flex-wrap gap-3 mb-12">
-              <Link href="/products" className="hero-cta px-6 py-3.5 rounded-xl bg-forest text-white text-sm font-semibold hover:bg-forest-700 active:scale-[0.98] transition-all duration-200 shadow-md">
-                Browse Catalogue
-              </Link>
-              <Link href="/quote" className="hero-cta px-6 py-3.5 rounded-xl bg-white border border-mint-200 text-forest text-sm font-semibold hover:border-mint-400 hover:shadow-card transition-all duration-200">
-                Request a Quote
-              </Link>
-            </div>
-
-            {/* Stats row */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {STATS.map((s) => (
-                <div key={s.label} className="hero-stat">
-                  <p className="font-display font-bold text-forest text-xl">{s.value}</p>
-                  <p className="text-stone-400 text-xs mt-0.5">{s.label}</p>
-                </div>
+            <span className="mt-2 block">
+              <span className="neon-word neon-word-accent inline-block mr-[0.26em] bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-200 bg-clip-text text-transparent drop-shadow-[0_0_22px_rgba(45,212,191,0.30)]">
+                backend
+              </span>
+              {"for hospital equipment".split(" ").map((w, i) => (
+                <span
+                  key={i}
+                  className="neon-word inline-block mr-[0.26em] bg-gradient-to-r from-white via-slate-100 to-white bg-clip-text text-transparent"
+                >
+                  {w}
+                </span>
               ))}
-            </div>
+            </span>
+          </h1>
+
+          <p className="neon-sub mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+            Source, certify, and track every device from a single trusted catalogue — built for procurement teams who can&apos;t afford guesswork.
+          </p>
+
+          <div className="neon-cta-row mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/products"
+              className="neon-cta neon-cta-primary inline-flex items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-300 px-6 py-3 text-sm font-semibold text-slate-950 shadow-[0_0_28px_rgba(34,211,238,0.35)] transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-200 hover:shadow-[0_0_40px_rgba(34,211,238,0.55)]"
+            >
+              Browse catalogue
+            </Link>
+            <Link
+              href="/quote"
+              className="neon-cta neon-cta-outline inline-flex items-center justify-center rounded-xl border border-white/12 bg-white/5 px-6 py-3 text-sm font-semibold text-white/90 backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-cyan-300/40 hover:bg-white/10 hover:text-cyan-100"
+            >
+              Request a quote
+            </Link>
           </div>
 
-          {/* Category selector card */}
-          <div className="glass rounded-3xl p-6 shadow-card float">
-            <p className="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-4">Browse by category</p>
-            <div className="grid grid-cols-2 gap-3">
-              {CATEGORIES.map((cat) => (
-                <Link key={cat.label} href={cat.href}
-                  className="hero-cat flex items-center gap-3 p-3.5 rounded-2xl bg-white/70 hover:bg-mint-50 border border-mint-100 hover:border-mint-300 group transition-all duration-200"
-                >
-                  <span className="w-9 h-9 rounded-xl bg-mint-100 text-mint-600 flex items-center justify-center text-lg group-hover:bg-forest group-hover:text-white transition-colors">
-                    {cat.icon}
-                  </span>
-                  <span className="text-sm font-medium text-forest leading-tight">{cat.label}</span>
-                </Link>
-              ))}
-            </div>
+          <div className="neon-feature-row mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {CATEGORIES.map((c) => (
+              <Link
+                key={c.label}
+                href={c.href}
+                className="neon-feature group rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-cyan-300/25 hover:bg-white/[0.06] hover:shadow-[0_0_30px_rgba(34,211,238,0.10)]"
+              >
+                <span className="neon-feature-icon mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-lg text-cyan-200 shadow-[0_0_20px_rgba(34,211,238,0.18)] transition group-hover:scale-105 group-hover:bg-cyan-300/15">
+                  {c.icon}
+                </span>
+                <div className="neon-feature-label text-sm font-semibold tracking-wide text-white">
+                  {c.label}
+                </div>
+                <div className="neon-feature-blurb mt-1 text-sm leading-6 text-slate-400">
+                  {c.blurb}
+                </div>
+              </Link>
+            ))}
+          </div>
 
-            {/* Trust badges */}
-            <div className="mt-5 pt-4 border-t border-mint-100 flex items-center justify-center gap-3">
-              {["FDA", "MDR", "ISO 13485", "CE"].map((b) => (
-                <span key={b} className="text-[10px] font-mono text-stone-400 border border-stone-200 rounded-md px-2 py-0.5">{b}</span>
-              ))}
-            </div>
+          <div className="neon-terminal mt-10 inline-flex max-w-full items-center gap-2 rounded-xl border border-white/10 bg-[#07111f]/80 px-4 py-3 font-mono text-[13px] text-cyan-100/90 shadow-[0_0_30px_rgba(0,0,0,0.35)] backdrop-blur-md">
+            <span className="neon-terminal-prompt text-cyan-300">$</span>
+            <span className="truncate">medequip status --fleet</span>
+            <span
+              ref={cursorRef}
+              className="neon-terminal-cursor inline-block h-[1.05em] w-[10px] bg-cyan-300"
+            />
           </div>
         </div>
       </div>

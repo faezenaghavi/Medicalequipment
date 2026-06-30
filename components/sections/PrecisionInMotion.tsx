@@ -15,14 +15,23 @@ function LiveTelemetryCard() {
   useEffect(() => {
     const path = pathRef.current;
     if (!path) return;
+
     const length = path.getTotalLength();
-    gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-    gsap.to(path, {
-      strokeDashoffset: 0,
+
+    // یک قطعه‌ی کوتاه (پالس نور) که روی کل مسیر می‌چرخه
+    const pulse = length * 0.22;
+    const gap = length - pulse;
+    gsap.set(path, { strokeDasharray: `${pulse} ${gap}`, strokeDashoffset: 0 });
+
+    // هر دور دقیقاً یک طول کامل مسیره، پس هیچ پرشی بین دورها دیده نمی‌شه
+    const tween = gsap.to(path, {
+      strokeDashoffset: -length,
       duration: 2.4,
-      ease: "power1.inOut",
+      ease: "none",
       repeat: -1,
     });
+
+    return () => { tween.kill(); };
   }, []);
 
   return (

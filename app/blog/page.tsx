@@ -32,35 +32,43 @@ export default function BlogPage() {
       <Navbar />
       <main className="min-h-screen bg-surface-100">
         {/* Blog hero */}
-        <section className="blog-hero">
-          <div className="hero-grain" aria-hidden="true" />
-          <div className="container relative z-10 py-24 text-center">
-            <span className="hero-eyebrow" style={{ justifyContent: "center" }}>
-              <span className="hero-eyebrow-dot" />
-              Insights &amp; resources
-            </span>
-            <h1 className="font-display font-extrabold text-white mt-5 mb-4" style={{ fontSize: "clamp(32px,4.4vw,52px)", lineHeight: 1.1 }}>
-              Procurement, compliance, and<br className="hidden md:block" />
-              <span className="hero-gradient-text">facility operations</span>, explained.
-            </h1>
-            <p className="text-white/70 max-w-xl mx-auto mb-8" style={{ fontSize: 16, lineHeight: 1.7 }}>
-              Practical guidance from people who buy, certify, and maintain medical equipment
-              for a living — not marketing copy.
-            </p>
-            <div className="max-w-md mx-auto relative">
-              <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-              </svg>
-              <input
-                type="search"
-                placeholder="Search articles…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="blog-search-input"
-              />
-            </div>
-          </div>
-        </section>
+<section className="blog-hero">
+  <div className="hero-grain" aria-hidden="true" />
+  <div className="container relative z-10 pt-8">
+    <nav className="breadcrumb breadcrumb-on-dark">
+      <Link href="/">Home</Link>
+      <span className="breadcrumb-sep">/</span>
+      <span className="breadcrumb-current">Blog</span>
+    </nav>
+  </div>
+
+  <div className="container relative z-10 pb-24 pt-8 text-center">
+    <span className="hero-eyebrow" style={{ justifyContent: "center" }}>
+      <span className="hero-eyebrow-dot" />
+      Insights &amp; resources
+    </span>
+    <h1 className="font-display font-extrabold text-white mt-5 mb-4" style={{ fontSize: "clamp(32px,4.4vw,52px)", lineHeight: 1.1 }}>
+      Procurement, compliance, and<br className="hidden md:block" />
+      <span className="hero-gradient-text">facility operations</span>, explained.
+    </h1>
+    <p className="text-white/70 max-w-xl mx-auto mb-8" style={{ fontSize: 16, lineHeight: 1.7 }}>
+      Practical guidance from people who buy, certify, and maintain medical equipment
+      for a living — not marketing copy.
+    </p>
+    <div className="max-w-md mx-auto relative">
+      <svg className="absolute left-[70px] top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+      </svg>
+      <input
+        type="search"
+        placeholder="Search articles…"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="blog-search-input"
+      />
+    </div>
+  </div>
+</section>
 
         <div className="container-page py-12">
           {/* Featured post */}
