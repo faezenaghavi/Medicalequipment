@@ -78,13 +78,12 @@ export default function ProductCard({ product }: { product: Product }) {
             <div className="product-stage-ring" aria-hidden="true" />
 
             <Image
-              src={coverSrc}
-              alt={product.name}
-              fill
-              sizes="(max-width: 768px) 100vw, 33vw"
-              className="object-contain p-6 group-hover:scale-[1.04] transition-transform duration-500 relative z-10"
-            />
-
+  src={coverSrc}
+  alt={product.name}
+  fill
+  sizes="(max-width: 768px) 100vw, 33vw"
+  className="object-cover group-hover:scale-[1.04] transition-transform duration-500 relative z-10"
+/>
             {product.featured && (
               <span className="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-gold-300 text-forest shadow-sm">
                 Featured

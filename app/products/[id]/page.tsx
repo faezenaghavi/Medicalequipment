@@ -36,9 +36,9 @@ export default async function ProductDetailPage({ params }: Props) {
   return (
     <>
       <Navbar />
-      <main className="pt-24 min-h-screen bg-surface-100">
+      <main className="pt-24 min-h-screen bg-[radial-gradient(circle_at_top,_rgba(214,240,228,0.9),_transparent_28%),linear-gradient(180deg,_#f7fbf8_0%,_#f2f7f3_45%,_#eef5f1_100%)]">
         <div className="container-page py-10">
-          <nav className="flex items-center gap-2 text-xs text-stone-400 mb-8">
+          <nav className="mb-8 flex items-center gap-2 rounded-full border border-mint-100 bg-white/70 px-4 py-2 text-xs text-stone-500 shadow-sm backdrop-blur">
             <Link href="/" className="hover:text-forest transition-colors">
               Home
             </Link>
@@ -50,25 +50,30 @@ export default async function ProductDetailPage({ params }: Props) {
             <span className="text-forest">{product.name}</span>
           </nav>
 
-          <div className="grid lg:grid-cols-[1fr_400px] gap-12 items-start">
-            <div>
-              <div className="relative h-72 md:h-96 rounded-2xl overflow-hidden bg-mint-50 mb-4 border border-mint-100">
-                <Image
-                  src={mainImage}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                  priority
-                />
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_400px] items-start">
+            <div className="space-y-6">
+              <div className="relative overflow-hidden rounded-[28px] border border-mint-100 bg-white shadow-[0_20px_60px_rgba(16,41,28,0.08)]">
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.35),transparent_40%)] pointer-events-none" />
+                <div className="relative h-72 md:h-[34rem]">
+                  <Image
+                    src={mainImage}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    priority
+                  />
+                </div>
               </div>
 
               {media.length > 1 && (
-                <div className="flex gap-3 mb-8">
+                <div className="flex gap-3 overflow-x-auto pb-1">
                   {media.map((src, i) => (
-                    <div
+                    <button
                       key={i}
-                      className="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-mint-200 shrink-0"
+                      type="button"
+                      className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-mint-100 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint-400"
+                      aria-label={`${product.name} view ${i + 1}`}
                     >
                       <Image
                         src={src}
@@ -77,76 +82,83 @@ export default async function ProductDetailPage({ params }: Props) {
                         className="object-cover"
                         sizes="80px"
                       />
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
 
-              <div className="bg-white rounded-2xl border border-mint-100 overflow-hidden">
-                <div className="px-6 py-4 border-b border-mint-100">
-                  <h2 className="font-display font-semibold text-forest text-lg">
+              <section className="overflow-hidden rounded-[28px] border border-mint-100 bg-white shadow-[0_20px_60px_rgba(16,41,28,0.08)]">
+                <div className="flex items-center justify-between border-b border-mint-100 px-6 py-4">
+                  <h2 className="font-display text-lg font-semibold text-forest">
                     Technical Specifications
                   </h2>
+                  <span className="rounded-full bg-mint-50 px-3 py-1 text-xs font-medium text-mint-700">
+                    Verified data
+                  </span>
                 </div>
+
                 <table className="w-full text-sm">
                   <tbody>
                     {Object.entries(product.specs).map(([k, v], i) => (
-                      <tr key={k} className={i % 2 === 0 ? "bg-surface-100" : "bg-white"}>
-                        <td className="px-6 py-3 text-stone-500 font-medium w-48">{k}</td>
-                        <td className="px-6 py-3 text-forest font-medium">{String(v)}</td>
+                      <tr
+                        key={k}
+                        className={i % 2 === 0 ? "bg-surface-100/70" : "bg-white"}
+                      >
+                        <td className="w-52 px-6 py-4 text-xs font-semibold uppercase tracking-wide text-stone-500">
+                          {k}
+                        </td>
+                        <td className="px-6 py-4 text-forest font-medium">
+                          {String(v)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </section>
             </div>
 
-            <div className="lg:sticky lg:top-28 space-y-5">
-              <div>
-                <p className="text-xs font-mono text-stone-400 uppercase tracking-wider mb-1">
+            <aside className="lg:sticky lg:top-28 space-y-4 rounded-[28px] border border-mint-100 bg-white/90 p-5 shadow-[0_24px_70px_rgba(16,41,28,0.10)] backdrop-blur">
+              <div className="rounded-2xl bg-[linear-gradient(180deg,#ffffff,#f6fbf7)] p-1">
+                <p className="text-xs font-mono uppercase tracking-[0.2em] text-stone-400">
                   {product.brand} · {product.sku}
                 </p>
-                <h1 className="font-display text-2xl md:text-3xl font-bold text-forest leading-snug mb-3">
+                <h1 className="mt-2 font-display text-2xl font-bold text-forest leading-snug">
                   {product.name}
                 </h1>
-                <p className="text-stone-500 text-sm leading-relaxed mb-4">
+                <p className="mt-3 text-sm leading-7 text-stone-500">
                   {product.description}
                 </p>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <AvailabilityBadge status={product.availability} />
-                  {product.leadTimeDays && (
-                    <span className="text-xs text-stone-400">
-                      Lead time: {product.leadTimeDays} days
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex flex-wrap gap-1.5 mb-5">
-                  {(product.certifications ?? []).map((c) => (
-                    <CertBadge key={c} cert={c} />
-                  ))}
-                </div>
               </div>
 
-              <div className="bg-white rounded-2xl border border-mint-100 p-5">
-                <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
+              <div className="flex flex-wrap gap-2">
+                <AvailabilityBadge status={product.availability} />
+                {product.leadTimeDays && (
+                  <span className="rounded-full border border-mint-200 bg-mint-50 px-3 py-1 text-xs font-medium text-mint-700">
+                    Lead time: {product.leadTimeDays} days
+                  </span>
+                )}
+              </div>
+
+              <div className="rounded-2xl border border-gold-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),#fff8e8)] p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-stone-400">
                   Starting from
                 </p>
-                <p className="font-display font-bold text-forest text-3xl mb-1">{price}</p>
-                <p className="text-xs text-stone-400">
+                <p className="mt-2 font-display text-4xl font-bold text-forest">
+                  {price}
+                </p>
+                <p className="mt-2 text-xs leading-6 text-stone-500">
                   Pricing varies by configuration. Contact for volume pricing.
                 </p>
               </div>
 
               <Link
                 href={`/quote?product=${product.id}`}
-                className="block w-full text-center px-6 py-4 rounded-2xl bg-forest text-white font-semibold hover:bg-forest-700 active:scale-[0.98] transition-all duration-200 shadow-md"
+                className="block w-full rounded-2xl bg-forest px-6 py-4 text-center font-semibold text-white shadow-[0_14px_30px_rgba(26,61,41,0.25)] transition hover:bg-forest-700 hover:shadow-[0_18px_38px_rgba(26,61,41,0.3)] active:scale-[0.99]"
               >
                 Request a Quote
               </Link>
 
-              <button className="w-full text-center px-6 py-4 rounded-2xl border-2 border-mint-200 text-forest font-semibold hover:bg-mint-50 hover:border-mint-400 transition-all duration-200">
+              <button className="w-full rounded-2xl border border-mint-200 bg-white px-6 py-4 text-center font-semibold text-forest shadow-sm transition hover:border-mint-300 hover:bg-mint-50">
                 Download Datasheet (PDF)
               </button>
 
@@ -154,21 +166,35 @@ export default async function ProductDetailPage({ params }: Props) {
                 {(product.tags ?? []).map((t) => (
                   <span
                     key={t}
-                    className="text-xs px-2.5 py-1 rounded-full bg-mint-50 text-mint-600 border border-mint-200"
+                    className="rounded-full border border-mint-200 bg-mint-50 px-3 py-1 text-xs font-medium text-mint-700"
                   >
                     {t}
                   </span>
                 ))}
               </div>
-            </div>
+
+              <div className="flex flex-wrap gap-1.5 pt-2">
+                {(product.certifications ?? []).map((c) => (
+                  <CertBadge key={c} cert={c} />
+                ))}
+              </div>
+            </aside>
           </div>
 
           {related.length > 0 && (
             <section className="mt-20">
-              <h2 className="font-display font-bold text-forest text-2xl mb-6">
-                Related Products
-              </h2>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="mb-6 flex items-end justify-between gap-4">
+                <div>
+                  <h2 className="font-display text-2xl font-bold text-forest">
+                    Related Products
+                  </h2>
+                  <p className="mt-1 text-sm text-stone-500">
+                    Similar devices from the same category.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((p) => {
                   const relatedImage = p.media?.[0] ?? FALLBACK_IMAGE;
 
@@ -176,9 +202,9 @@ export default async function ProductDetailPage({ params }: Props) {
                     <Link
                       key={p.id}
                       href={`/products/${p.id}`}
-                      className="group bg-white rounded-2xl border border-mint-100 hover:border-mint-300 hover:shadow-card p-5 transition-all duration-200 flex items-start gap-4"
+                      className="group flex items-start gap-4 rounded-2xl border border-mint-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-mint-300 hover:shadow-[0_16px_36px_rgba(16,41,28,0.10)]"
                     >
-                      <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-mint-50">
+                      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-mint-50">
                         <Image
                           src={relatedImage}
                           alt={p.name}
@@ -187,12 +213,14 @@ export default async function ProductDetailPage({ params }: Props) {
                           sizes="80px"
                         />
                       </div>
-                      <div>
-                        <p className="text-xs text-stone-400 mb-0.5">{p.brand}</p>
-                        <p className="font-semibold text-forest text-sm group-hover:text-mint-600 transition-colors">
+                      <div className="min-w-0">
+                        <p className="text-xs font-mono uppercase tracking-wide text-stone-400">
+                          {p.brand}
+                        </p>
+                        <p className="mt-1 truncate font-semibold text-forest text-sm group-hover:text-mint-600 transition-colors">
                           {p.name}
                         </p>
-                        <p className="text-xs text-stone-400 mt-1">{p.sku}</p>
+                        <p className="mt-1 text-xs text-stone-400">{p.sku}</p>
                       </div>
                     </Link>
                   );
